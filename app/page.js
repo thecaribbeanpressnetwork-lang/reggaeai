@@ -1,3 +1,5 @@
+import ImportForm from './components/ImportForm';
+
 const rails = [
   ['Fresh Outta the Caribbean', ['The River Knows My Name', 'Midnight Cane Riddim', 'Steelpan After Dark', 'Kaiso 2040']],
   ['Reggae Right Now', ['Country Reggae', 'Roots & Dub', 'Lovers Rock', 'Modern Reggae']],
@@ -39,17 +41,17 @@ export default function Home() {
           <p className="eyebrow">CARIBBEAN AI MUSIC · BUILT IN THE CARIBBEAN</p>
           <h1>The islands are<br/><em>creating next.</em></h1>
           <p>Discover new Caribbean AI music, trace the riddims behind the records, create your own sound and publish with clear provenance.</p>
-          <div className="heroActions"><button className="primary">Start listening</button><button className="secondary">+ Create</button></div>
+          <div className="heroActions"><a className="primary linkButton" href="#catalogue">Start listening</a><a className="secondary linkButton" href="#upload">+ Create</a></div>
         </div>
         <div className="lionMark" aria-label="ReggaeAI winged lion brand mark"><div className="wing leftWing"/><div className="lion">RAI</div><div className="wing rightWing"/></div>
       </section>
 
       <section className="importPanel" id="upload">
         <div><span className="eyebrow">ONE-LINK IMPORT</span><h2>Bring your AI song into ReggaeAI.</h2><p>Paste a supported Suno, Treblo or other AI-music link. ReggaeAI resolves the metadata, provenance and catalogue draft; you confirm rights before publication.</p></div>
-        <form><input aria-label="Song link" placeholder="https://suno.com/s/..."/><button type="button" className="primary">Import song</button></form>
+        <ImportForm />
       </section>
 
-      <div className="content">
+      <div className="content" id="catalogue">
         {rails.map(([title, items]) => <Rail key={title} title={title} items={items}/>) }
       </div>
 
