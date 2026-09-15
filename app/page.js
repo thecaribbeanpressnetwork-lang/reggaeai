@@ -11,17 +11,6 @@ export default async function Home() {
 
   return (
     <main>
-      <header className="topbar">
-        <a className="brand" href="/#discover" aria-label="ReggaeAI home">
-          <img src="/reggaeai-lion.svg" alt="" className="brandIcon" />
-          <Wordmark />
-        </a>
-        <nav aria-label="Primary navigation">
-          <a href="/#discover">Discover</a><a href="/search">Search</a><a href="/riddim-yard">Riddim Yard</a><a href="/create">Create</a><a href="/account/library">Library</a><a href="/upload">Upload</a>
-        </nav>
-        <a className="account" href="/account" aria-label="Open ReggaeAI account">Account</a>
-      </header>
-
       <section className="hero" id="discover">
         <div className="heroTexture" />
         <div className="heroCopy">
@@ -57,15 +46,6 @@ export default async function Home() {
         <div className="footerBrand"><img src="/reggaeai-lion.svg" alt=""/><Wordmark /></div>
         <span>Discovery · Creation · Licensing · Caribbean music intelligence</span>
       </footer>
-
-      <div className="player playerDormant" aria-label="ReggaeAI player awaiting authorized published audio">
-        <div className="miniArt"><img src="/reggaeai-lion.svg" alt="" /></div>
-        <div className="track"><strong>Player ready</strong><small>Activates when a published track has authorized audio.</small></div>
-        <button disabled aria-label="Previous track">⏮</button>
-        <button className="playerPlay" disabled aria-label="Play">▶</button>
-        <button disabled aria-label="Next track">⏭</button>
-        <div className="progress"><span/></div>
-      </div>
     </main>
   );
 }
