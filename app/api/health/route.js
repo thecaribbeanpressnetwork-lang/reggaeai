@@ -2,6 +2,7 @@ import { authCapability } from '../../../auth';
 import { adminCapability } from '../../../lib/access';
 import { databaseConfigured } from '../../../lib/db';
 import { trebloConfigured } from '../../../lib/providers/treblo';
+import { googleDriveConfigured } from '../../../lib/storage/googleDrive';
 import { getWiPayConfig, wiPayReadyForLive } from '../../lib/payments/wipay';
 
 export const dynamic = 'force-dynamic';
@@ -29,7 +30,7 @@ export async function GET() {
       auth: auth.state,
       founderAdmin: admin.state,
       musicGeneration: trebloConfigured() ? 'READY' : 'TO_CREATE',
-      controlledStorage: 'TO_CREATE',
+      controlledStorage: googleDriveConfigured() ? 'READY_GOOGLE_DRIVE' : 'OAUTH_REQUIRED',
       imageGeneration: 'TO_VERIFY',
       videoGeneration: 'TO_VERIFY',
       payments: wipay.environment === 'live' ? (wiPayReadyForLive(wipay) ? 'READY' : 'BLOCKED') : 'SANDBOX',
