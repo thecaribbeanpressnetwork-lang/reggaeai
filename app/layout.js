@@ -1,4 +1,7 @@
 import './globals.css';
+import './catalogue.css';
+
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://reggaeai-live-production.up.railway.app';
 
 export const metadata = {
   title: {
@@ -6,7 +9,7 @@ export const metadata = {
     template: '%s | ReggaeAI'
   },
   description: 'Discover, create, license and publish Caribbean AI music, riddims and videos.',
-  metadataBase: new URL('https://reggaeai-production-production.up.railway.app'),
+  metadataBase: new URL(baseUrl),
   alternates: { canonical: '/' },
   openGraph: {
     title: 'ReggaeAI',
@@ -19,6 +22,11 @@ export const metadata = {
     title: 'ReggaeAI — Caribbean AI Music',
     description: 'Caribbean-first AI music discovery, creation and licensing.'
   }
+};
+
+export const viewport = {
+  themeColor: '#090806',
+  colorScheme: 'dark'
 };
 
 export default function RootLayout({ children }) {
