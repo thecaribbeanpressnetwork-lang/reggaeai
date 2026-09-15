@@ -8,7 +8,9 @@ export default function MusicRail({ title, href, items }) {
       <div className="cards">
         {items.map((item, index) => (
           <a className="card" href={item.href} key={`${item.title}-${index}`}>
-            <div className="art" aria-hidden="true"><span>{item.badge}</span></div>
+            <div className={`art ${item.artworkUrl ? 'hasArtwork' : 'typeArtwork'}`} aria-hidden="true">
+              {item.artworkUrl ? <img src={item.artworkUrl} alt="" /> : <><span>{item.badge}</span><strong>{item.title}</strong></>}
+            </div>
             <div className="cardCopy">
               <strong>{item.title}</strong>
               <small>{item.subtitle}</small>
