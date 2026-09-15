@@ -19,7 +19,7 @@ export default async function Home() {
         <nav aria-label="Primary navigation">
           <a href="#discover">Discover</a><a href="#catalogue">Browse</a><a href="/riddim-yard">Riddim Yard</a><a href="#upload">Create</a><a href="#upload">Upload</a>
         </nav>
-        <button className="account" type="button" disabled aria-label="Accounts coming next">Sign in</button>
+        <a className="account" href="/account" aria-label="Open ReggaeAI account">Account</a>
       </header>
 
       <section className="hero" id="discover">
