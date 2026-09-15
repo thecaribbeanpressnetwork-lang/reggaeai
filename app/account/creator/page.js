@@ -1,4 +1,5 @@
 import { evaluateReadiness } from '../../lib/readiness';
+import styles from './creator.module.css';
 
 export const metadata = { title: 'Creator | ReggaeAI', robots: { index: false, follow: false } };
 
@@ -11,10 +12,6 @@ const sample = evaluateReadiness({
   credits_state: 'missing',
   catalogue_state: 'unchecked'
 });
-
-function StatePill({ children, tone = 'neutral' }) {
-  return <span className={`accountState small ${tone}`}>{children}</span>;
-}
 
 export default function CreatorPage() {
   return (
@@ -29,44 +26,44 @@ export default function CreatorPage() {
         <article className="accountCard static">
           <span className="accountCardTitle">Artist identity</span>
           <p>Imported profiles can be linked to your account through a claim. Approval requires evidence; source URLs alone are not proof.</p>
-          <StatePill>AUTH REQUIRED</StatePill>
+          <span className={styles.state}>AUTH REQUIRED</span>
         </article>
 
         <article className="accountCard static">
           <span className="accountCardTitle">Imports</span>
           <p>One-link and bulk imports remain linked to their provider, canonical source and rights declaration.</p>
-          <StatePill>PROVENANCE PRESERVED</StatePill>
+          <span className={styles.state}>PROVENANCE PRESERVED</span>
         </article>
 
         <article className="accountCard static">
           <span className="accountCardTitle">Earnings</span>
           <p>Only verified sales can accrue creator balances. USD payouts are monthly once the available balance reaches US$25.</p>
-          <a className="secondary linkButton compactAction" href="/account/earnings">View earnings</a>
+          <a className={`secondary linkButton ${styles.action}`} href="/account/earnings">View earnings</a>
         </article>
       </section>
 
-      <section className="readinessPanel">
-        <div className="readinessHead">
+      <section className={styles.panel}>
+        <div className={styles.head}>
           <div>
             <span className="eyebrow">RELEASE INTELLIGENCE</span>
             <h2>Readiness is evidence-driven.</h2>
           </div>
-          <div className="readinessScore" aria-label={`Readiness score ${sample.score} percent`}>
+          <div className={styles.score} aria-label={`Readiness score ${sample.score} percent`}>
             <strong>{sample.score}%</strong>
             <span>{sample.readiness_state.replaceAll('_', ' ')}</span>
           </div>
         </div>
 
-        <div className="readinessGrid">
+        <div className={styles.grid}>
           {sample.blockers.map((item) => (
-            <article className="readinessItem" key={item.field}>
+            <article className={styles.item} key={item.field}>
               <span>{item.field}</span>
               <strong>{String(item.state).replaceAll('_', ' ')}</strong>
             </article>
           ))}
         </div>
 
-        <p className="readinessNote">This example remains blocked because rights and AI provenance are unresolved. ReggaeAI will never convert a high numerical score into publication approval while a hard blocker remains.</p>
+        <p className={styles.note}>This example remains blocked because rights and AI provenance are unresolved. ReggaeAI will never convert a high numerical score into publication approval while a hard blocker remains.</p>
       </section>
     </main>
   );
