@@ -2,6 +2,7 @@ import './globals.css';
 import './catalogue.css';
 import './shell.css';
 import './home.css';
+import './brand-texture.css';
 import SiteHeader from './components/SiteHeader';
 import PersistentPlayer from './components/PersistentPlayer';
 
