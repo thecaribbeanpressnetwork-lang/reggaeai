@@ -13,7 +13,6 @@ export const metadata = {
   },
   description: 'Discover, create, license and publish Caribbean AI music, riddims and videos.',
   metadataBase: new URL(baseUrl),
-  alternates: { canonical: '/' },
   openGraph: {
     title: 'ReggaeAI',
     description: 'Caribbean-first AI music discovery, creation and licensing.',
