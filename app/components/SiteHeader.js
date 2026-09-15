@@ -1,0 +1,3 @@
+function Wordmark(){return <span className="wordmark"><span className="wordmarkReggae">REGGAE</span><span className="wordmarkAi">AI</span></span>;}
+
+export default function SiteHeader(){return <header className="topbar"><a className="brand" href="/#discover" aria-label="ReggaeAI home"><img src="/reggaeai-lion.svg" alt="" className="brandIcon"/><Wordmark/></a><nav aria-label="Primary navigation"><a href="/#discover">Discover</a><a href="/search">Search</a><a href="/riddim-yard">Riddim Yard</a><a href="/create">Create</a><a href="/account/library">Library</a><a href="/upload">Upload</a></nav><a className="account" href="/account" aria-label="Open ReggaeAI account">Account</a></header>;}
