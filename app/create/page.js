@@ -1,3 +1,4 @@
+import './create.css';
 import CreateMusicForm from '../components/CreateMusicForm';
 import { auth } from '../../auth';
 import { databaseConfigured } from '../../lib/db';
