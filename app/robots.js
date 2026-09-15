@@ -1,7 +1,9 @@
 export default function robots() {
-  const base = 'https://reggaeai-production-production.up.railway.app';
+  const base = process.env.NEXT_PUBLIC_SITE_URL || 'https://reggaeai-live-production.up.railway.app';
   return {
-    rules: [{ userAgent: '*', allow: '/' }],
+    rules: [
+      { userAgent: '*', allow: ['/', '/search', '/artists/', '/music/', '/releases/', '/riddims/', '/riddim-yard', '/genres/'], disallow: ['/account/', '/admin/', '/api/'] }
+    ],
     sitemap: `${base}/sitemap.xml`,
     host: base
   };
