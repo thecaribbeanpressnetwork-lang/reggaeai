@@ -5,7 +5,7 @@ export const seedCatalogueRails = [
     title: 'Fresh Outta the Caribbean',
     href: '/genres/ai-reggae',
     items: [
-      { title: 'The River Knows My Name', subtitle: 'Aven Indigo · Shot Call Release 001', badge: 'COMING SOON', href: '/genres/country-reggae' },
+      { title: 'The River Knows My Name', subtitle: 'Aven Indigo · Shot Call Release 001', badge: 'COMING SOON', href: '/music/the-river-knows-my-name' },
       { title: 'Country Reggae', subtitle: 'Caribbean storytelling meets country structure', badge: 'GENRE', href: '/genres/country-reggae' },
       { title: 'AI Kaiso', subtitle: 'Kaiso intelligence, commentary and cadence', badge: 'GENRE', href: '/genres/ai-kaiso' },
       { title: 'AI Steelpan', subtitle: 'Steelpan-led AI music and instrumentals', badge: 'GENRE', href: '/genres/ai-steelpan' }
@@ -38,9 +38,9 @@ export async function getCatalogueRails() {
 
   try {
     const { rows } = await query(`
-      select r.slug, r.title, r.primary_genre, a.name as artist
+      select r.slug, r.title, r.primary_genre, a.display_name as artist
       from recordings r
-      left join artists a on a.id = r.artist_id
+      left join artists a on a.id = r.primary_artist_id
       where r.publication_state = 'PUBLISHED'
       order by r.created_at desc
       limit 12
