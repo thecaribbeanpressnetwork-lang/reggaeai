@@ -1,3 +1,4 @@
+import '../create/create.css';
 import { auth } from '../../auth';
 import { adminCapability, isAdminSession } from '../../lib/access';
 import { databaseConfigured } from '../../lib/db';
