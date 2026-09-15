@@ -38,10 +38,10 @@ export async function getCatalogueRails() {
 
   try {
     const { rows } = await query(`
-      select r.slug, r.title, r.primary_genre, a.display_name as artist
+      select r.slug, r.title, r.primary_genre, r.artwork_url, a.display_name as artist
       from recordings r
       left join artists a on a.id = r.primary_artist_id
-      where r.publication_state = 'PUBLISHED'
+      where upper(r.publication_state) = 'PUBLISHED'
       order by r.created_at desc
       limit 12
     `);
@@ -57,7 +57,8 @@ export async function getCatalogueRails() {
           title: row.title,
           subtitle: [row.artist, row.primary_genre].filter(Boolean).join(' · '),
           badge: 'RELEASE',
-          href: `/music/${row.slug}`
+          href: `/music/${row.slug}`,
+          artworkUrl: row.artwork_url || null
         }))
       }]
     };
