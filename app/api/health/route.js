@@ -11,12 +11,13 @@ export async function GET() {
   const wipay = getWiPayConfig();
   const auth = authCapability();
   const admin = adminCapability();
+  const database = databaseConfigured();
 
   return Response.json({
     ok: true,
     service: 'reggaeai',
     version: '0.1.0',
-    status: 'foundation-live',
+    status: database ? 'v1-runtime-live' : 'v1-runtime-degraded',
     deployment: {
       environment: process.env.RAILWAY_ENVIRONMENT_NAME || null,
       service: process.env.RAILWAY_SERVICE_NAME || null,
@@ -26,7 +27,7 @@ export async function GET() {
       publicCatalogue: 'READY',
       search: 'READY',
       smartImportDiscovery: 'READY',
-      database: databaseConfigured() ? 'READY' : 'TO_CREATE',
+      database: database ? 'READY' : 'TO_CREATE',
       auth: auth.state,
       founderAdmin: admin.state,
       musicGeneration: trebloConfigured() ? 'READY' : 'TO_CREATE',
