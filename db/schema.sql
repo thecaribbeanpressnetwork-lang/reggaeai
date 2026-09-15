@@ -1,7 +1,19 @@
 -- ReggaeAI core PostgreSQL schema
--- Designed for Supabase/Postgres or equivalent managed Postgres.
+-- Designed for managed PostgreSQL (Railway Postgres, Supabase, or equivalent).
 
 create extension if not exists pgcrypto;
+
+create table if not exists users (
+  id uuid primary key default gen_random_uuid(),
+  email text unique,
+  display_name text,
+  avatar_url text,
+  auth_provider text,
+  auth_subject text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique(auth_provider, auth_subject)
+);
 
 create table if not exists artists (
   id uuid primary key default gen_random_uuid(),
@@ -13,6 +25,17 @@ create table if not exists artists (
   verified boolean not null default false,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
+);
+
+create table if not exists artist_claims (
+  id uuid primary key default gen_random_uuid(),
+  artist_id uuid not null references artists(id) on delete cascade,
+  user_id uuid not null references users(id) on delete cascade,
+  state text not null default 'pending' check (state in ('pending','approved','rejected','revoked')),
+  evidence jsonb not null default '{}'::jsonb,
+  reviewed_at timestamptz,
+  created_at timestamptz not null default now(),
+  unique(artist_id, user_id)
 );
 
 create table if not exists productions (
@@ -46,6 +69,7 @@ create table if not exists recordings (
 
 create table if not exists imports (
   id uuid primary key default gen_random_uuid(),
+  user_id uuid references users(id),
   source_provider text not null,
   source_url text not null,
   canonical_url text,
@@ -57,6 +81,13 @@ create table if not exists imports (
   state text not null default 'discovered',
   created_at timestamptz not null default now(),
   unique(source_provider, provider_item_id)
+);
+
+create table if not exists library_items (
+  user_id uuid not null references users(id) on delete cascade,
+  recording_id uuid not null references recordings(id) on delete cascade,
+  created_at timestamptz not null default now(),
+  primary key(user_id, recording_id)
 );
 
 create table if not exists products (
@@ -74,7 +105,7 @@ create table if not exists products (
 create table if not exists orders (
   id uuid primary key default gen_random_uuid(),
   external_order_id text not null unique,
-  buyer_user_id uuid,
+  buyer_user_id uuid references users(id),
   status text not null default 'pending',
   currency text not null default 'USD',
   gross_amount numeric(12,2) not null,
@@ -93,8 +124,18 @@ create table if not exists order_items (
   quantity integer not null default 1 check (quantity > 0)
 );
 
+create table if not exists download_entitlements (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references users(id) on delete cascade,
+  order_item_id uuid not null references order_items(id) on delete cascade,
+  status text not null default 'active' check (status in ('active','revoked','refunded')),
+  created_at timestamptz not null default now(),
+  unique(user_id, order_item_id)
+);
+
 create table if not exists rights_holders (
   id uuid primary key default gen_random_uuid(),
+  user_id uuid references users(id),
   artist_id uuid references artists(id),
   display_name text not null,
   payout_currency text not null default 'USD',
