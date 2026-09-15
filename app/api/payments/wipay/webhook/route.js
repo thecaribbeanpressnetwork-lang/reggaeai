@@ -1,6 +1,6 @@
-import { getPool } from '../../../../../../lib/db';
-import { accrueVerifiedOrder, reverseOrderAccruals } from '../../../../../../lib/accounting';
-import { verifyWiPayWebhook } from '../../../../../lib/payments/wipay';
+import { getPool } from '../../../../../lib/db';
+import { accrueVerifiedOrder, reverseOrderAccruals } from '../../../../../lib/accounting';
+import { verifyWiPayWebhook } from '../../../../lib/payments/wipay';
 
 const reversalEvents=new Set(['payment.refunded','payment.chargeback_processed','payment.fraud_confirmed']);
 
