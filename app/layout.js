@@ -1,5 +1,7 @@
 import './globals.css';
 import './catalogue.css';
+import SiteHeader from './components/SiteHeader';
+import PersistentPlayer from './components/PersistentPlayer';
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://reggaeai-live-production.up.railway.app';
 
@@ -32,7 +34,11 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <SiteHeader />
+        {children}
+        <PersistentPlayer />
+      </body>
     </html>
   );
 }
