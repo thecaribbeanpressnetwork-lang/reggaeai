@@ -12,12 +12,12 @@ export default async function Home() {
   return (
     <main>
       <header className="topbar">
-        <a className="brand" href="#discover" aria-label="ReggaeAI home">
+        <a className="brand" href="/#discover" aria-label="ReggaeAI home">
           <img src="/reggaeai-lion.svg" alt="" className="brandIcon" />
           <Wordmark />
         </a>
         <nav aria-label="Primary navigation">
-          <a href="#discover">Discover</a><a href="#catalogue">Browse</a><a href="/riddim-yard">Riddim Yard</a><a href="#upload">Create</a><a href="#upload">Upload</a>
+          <a href="/#discover">Discover</a><a href="/search">Search</a><a href="/riddim-yard">Riddim Yard</a><a href="/create">Create</a><a href="/account/library">Library</a><a href="/upload">Upload</a>
         </nav>
         <a className="account" href="/account" aria-label="Open ReggaeAI account">Account</a>
       </header>
@@ -30,7 +30,7 @@ export default async function Home() {
           <p>Discover Caribbean AI music, trace the riddims behind the records, create your own sound and publish with clear provenance.</p>
           <div className="heroActions">
             <a className="primary linkButton" href="#catalogue">Explore the catalogue</a>
-            <a className="secondary linkButton" href="#upload">Import a song</a>
+            <a className="secondary linkButton" href="/upload">Import a song</a>
           </div>
         </div>
         <div className="brandCrest" aria-label="ReggaeAI original winged lion emblem">
