@@ -6,19 +6,11 @@ export async function POST(request) {
   const session = await auth();
 
   if (!session?.user?.email) {
-    return NextResponse.json({
-      ok: false,
-      state: 'AUTH_REQUIRED',
-      message: 'Sign in before submitting an artist claim.'
-    }, { status: 401 });
+    return NextResponse.json({ ok: false, state: 'AUTH_REQUIRED', message: 'Sign in before submitting an artist claim.' }, { status: 401 });
   }
 
   if (!databaseConfigured()) {
-    return NextResponse.json({
-      ok: false,
-      state: 'DATABASE_REQUIRED',
-      message: 'Artist claims are unavailable until persistent storage is connected.'
-    }, { status: 503 });
+    return NextResponse.json({ ok: false, state: 'DATABASE_REQUIRED', message: 'Artist claims are unavailable until persistent storage is connected.' }, { status: 503 });
   }
 
   const body = await request.json().catch(() => ({}));
@@ -26,30 +18,30 @@ export async function POST(request) {
   const artistId = String(body.artist_id || '').trim();
 
   if (!artistId || evidence.length < 12) {
-    return NextResponse.json({
-      ok: false,
-      state: 'INVALID_REQUEST',
-      message: 'artist_id and meaningful ownership evidence are required.'
-    }, { status: 400 });
+    return NextResponse.json({ ok: false, state: 'INVALID_REQUEST', message: 'artist_id and meaningful ownership evidence are required.' }, { status: 400 });
   }
 
   try {
     const userResult = await query('select id from users where email = $1 limit 1', [session.user.email.toLowerCase()]);
     const userId = userResult.rows[0]?.id;
-    if (!userId) {
-      return NextResponse.json({ ok: false, state: 'ACCOUNT_NOT_PERSISTED' }, { status: 409 });
-    }
+    if (!userId) return NextResponse.json({ ok: false, state: 'ACCOUNT_NOT_PERSISTED' }, { status: 409 });
 
     const artistResult = await query('select id, display_name from artists where id = $1 limit 1', [artistId]);
-    if (!artistResult.rows[0]) {
-      return NextResponse.json({ ok: false, state: 'ARTIST_NOT_FOUND' }, { status: 404 });
-    }
+    if (!artistResult.rows[0]) return NextResponse.json({ ok: false, state: 'ARTIST_NOT_FOUND' }, { status: 404 });
+
+    const evidenceJson = JSON.stringify({
+      statement: evidence,
+      submittedBy: session.user.email,
+      submittedAt: new Date().toISOString(),
+      source: 'creator_claim_form'
+    });
 
     const inserted = await query(
       `insert into artist_claims (user_id, artist_id, evidence, status)
-       values ($1,$2,$3,'submitted')
+       values ($1,$2,$3::jsonb,'pending')
+       on conflict (artist_id, user_id) do update set evidence = excluded.evidence, status = 'pending', reviewed_at = null
        returning id, status, created_at`,
-      [userId, artistId, evidence]
+      [userId, artistId, evidenceJson]
     );
 
     return NextResponse.json({
