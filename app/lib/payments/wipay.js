@@ -1,66 +1,10 @@
 import crypto from 'node:crypto';
 
-const WIPAY_TT_ENDPOINT = 'https://tt.wipayfinancial.com/plugins/payments/request';
+const LIVE_ENDPOINT='https://tt.wipayfinancial.com/plugins/payments/request';
+const SANDBOX_ENDPOINT='https://ttsb.wipayfinancial.com/plugins/payments/request';
 
-export function getWiPayConfig() {
-  const environment = process.env.WIPAY_ENV === 'live' ? 'live' : 'sandbox';
-  return {
-    environment,
-    endpoint: WIPAY_TT_ENDPOINT,
-    accountNumber: environment === 'sandbox' ? '1234567890' : process.env.WIPAY_ACCOUNT_NUMBER,
-    apiKey: environment === 'sandbox' ? (process.env.WIPAY_API_KEY || '123') : process.env.WIPAY_API_KEY,
-    origin: process.env.WIPAY_ORIGIN || 'ReggaeAI',
-    responseUrl: process.env.WIPAY_RESPONSE_URL
-  };
-}
-
-export function wiPayReadyForLive(config = getWiPayConfig()) {
-  return config.environment === 'live' && Boolean(config.accountNumber && config.apiKey && config.responseUrl);
-}
-
-export async function createHostedCheckout({ orderId, total, currency = 'USD', data = {} }) {
-  const config = getWiPayConfig();
-  if (config.environment === 'live' && !wiPayReadyForLive(config)) {
-    throw new Error('WiPay live credentials are not configured.');
-  }
-
-  const responseUrl = config.responseUrl || 'https://reggaeai-live.up.railway.app/api/payments/wipay/response';
-  const body = new URLSearchParams({
-    account_number: config.accountNumber,
-    avs: '0',
-    country_code: 'TT',
-    currency,
-    environment: config.environment,
-    fee_structure: 'merchant_absorb',
-    method: 'credit_card',
-    order_id: orderId,
-    origin: config.origin,
-    response_url: responseUrl,
-    total: Number(total).toFixed(2),
-    data: JSON.stringify(data)
-  });
-
-  const response = await fetch(config.endpoint, {
-    method: 'POST',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/x-www-form-urlencoded' },
-    body,
-    cache: 'no-store'
-  });
-
-  const text = await response.text();
-  let payload;
-  try { payload = JSON.parse(text); } catch { payload = null; }
-  if (!response.ok || !payload?.url || !payload?.transaction_id) {
-    throw new Error(payload?.message || 'WiPay did not return a hosted checkout URL.');
-  }
-  return { ...payload, environment: config.environment };
-}
-
-export function verifyWiPayResponse({ transactionId, total, hash }) {
-  const { apiKey } = getWiPayConfig();
-  if (!transactionId || !total || !hash || !apiKey) return false;
-  const expected = crypto.createHash('md5').update(`${transactionId}${total}${apiKey}`).digest('hex');
-  const actual = String(hash).toLowerCase();
-  if (expected.length !== actual.length) return false;
-  return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(actual));
-}
+export function getWiPayConfig(){const environment=process.env.WIPAY_ENV==='live'?'live':'sandbox';return{environment,endpoint:environment==='live'?LIVE_ENDPOINT:SANDBOX_ENDPOINT,accountNumber:environment==='sandbox'?'1234567890':process.env.WIPAY_ACCOUNT_NUMBER,apiKey:environment==='sandbox'?'123':process.env.WIPAY_API_KEY,origin:process.env.WIPAY_ORIGIN||'ReggaeAI',responseUrl:process.env.WIPAY_RESPONSE_URL||`${process.env.NEXT_PUBLIC_SITE_URL||'https://reggaeai-live-production.up.railway.app'}/api/payments/wipay/response`};}
+export function wiPayReadyForLive(config=getWiPayConfig()){return config.environment==='live'&&Boolean(config.accountNumber&&config.apiKey&&config.responseUrl);}
+export async function createHostedCheckout({orderId,total,currency='USD',data={}}){const config=getWiPayConfig();if(config.environment==='live'&&!wiPayReadyForLive(config))throw new Error('WiPay live credentials are not configured.');const body=new URLSearchParams({account_number:config.accountNumber,avs:'0',country_code:'TT',currency,environment:config.environment,fee_structure:'merchant_absorb',method:'credit_card',order_id:orderId,origin:config.origin,response_url:config.responseUrl,total:Number(total).toFixed(2),data:JSON.stringify(data)});const response=await fetch(config.endpoint,{method:'POST',headers:{Accept:'application/json','Content-Type':'application/x-www-form-urlencoded'},body,cache:'no-store'});const text=await response.text();let payload;try{payload=JSON.parse(text);}catch{payload=null;}if(!response.ok||!payload?.url||!payload?.transaction_id)throw new Error(payload?.message||'WiPay did not return a hosted checkout URL.');return{...payload,environment:config.environment};}
+export function verifyWiPayResponse({transactionId,originalTotal,hash}){const{apiKey}=getWiPayConfig();if(!transactionId||originalTotal===undefined||!hash||!apiKey)return false;const expected=crypto.createHash('md5').update(`${transactionId}${Number(originalTotal).toFixed(2)}${apiKey}`).digest('hex');const actual=String(hash).toLowerCase();if(expected.length!==actual.length||!/^[a-f0-9]+$/i.test(actual))return false;return crypto.timingSafeEqual(Buffer.from(expected,'hex'),Buffer.from(actual,'hex'));}
+export function verifyWiPayWebhook({rawBody,timestamp,signature,secret=process.env.WIPAY_WEBHOOK_SECRET,toleranceSeconds=300}){if(!rawBody||!secret||!/^[0-9]+$/.test(String(timestamp||'')))return false;const age=Math.abs(Math.floor(Date.now()/1000)-Number(timestamp));if(age>toleranceSeconds)return false;const received=String(signature||'').replace(/^sha256=/i,'');if(!/^[a-f0-9]{64}$/i.test(received))return false;const expected=crypto.createHmac('sha256',secret).update(`${timestamp}.${rawBody}`).digest('hex');return crypto.timingSafeEqual(Buffer.from(expected,'hex'),Buffer.from(received,'hex'));}
