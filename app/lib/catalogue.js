@@ -1,4 +1,6 @@
-export const catalogueRails = [
+import { databaseConfigured, query } from '../../lib/db';
+
+export const seedCatalogueRails = [
   {
     title: 'Fresh Outta the Caribbean',
     href: '/genres/ai-reggae',
@@ -30,3 +32,37 @@ export const catalogueRails = [
     ]
   }
 ];
+
+export async function getCatalogueRails() {
+  if (!databaseConfigured()) return { source: 'seed', rails: seedCatalogueRails };
+
+  try {
+    const { rows } = await query(`
+      select r.slug, r.title, r.primary_genre, a.name as artist
+      from recordings r
+      left join artists a on a.id = r.artist_id
+      where r.publication_state = 'PUBLISHED'
+      order by r.created_at desc
+      limit 12
+    `);
+
+    if (!rows.length) return { source: 'database-empty', rails: seedCatalogueRails };
+
+    return {
+      source: 'database',
+      rails: [{
+        title: 'Fresh Outta the Caribbean',
+        href: '/music',
+        items: rows.map((row) => ({
+          title: row.title,
+          subtitle: [row.artist, row.primary_genre].filter(Boolean).join(' · '),
+          badge: 'RELEASE',
+          href: `/music/${row.slug}`
+        }))
+      }]
+    };
+  } catch (error) {
+    console.error('catalogue_read_failed', error?.message || error);
+    return { source: 'database-error', rails: seedCatalogueRails };
+  }
+}
