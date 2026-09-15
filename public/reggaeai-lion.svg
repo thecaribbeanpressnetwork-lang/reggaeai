@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">ReggaeAI winged lion</title><desc id="desc">Original geometric winged lion emblem for ReggaeAI.</desc>
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F2D27D"/><stop offset=".45" stop-color="#C89A3D"/><stop offset="1" stop-color="#8B6222"/></linearGradient>
+    <radialGradient id="halo"><stop offset="0" stop-color="#D6B45C" stop-opacity=".24"/><stop offset="1" stop-color="#D6B45C" stop-opacity="0"/></radialGradient>
+  </defs>
+  <ellipse cx="600" cy="382" rx="310" ry="300" fill="url(#halo)"/>
+  <g fill="none" stroke="url(#gold)" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M454 314C342 182 203 128 72 112c69 55 116 109 142 164-63-24-122-34-176-27 85 39 151 86 199 142-55-8-103-3-147 16 82 20 153 58 214 119 39-19 73-42 101-70" stroke-width="18"/>
+    <path d="M746 314c112-132 251-186 382-202-69 55-116 109-142 164 63-24 122-34 176-27-85 39-151 86-199 142 55-8 103-3 147 16-82 20-153 58-214 119-39-19-73-42-101-70" stroke-width="18"/>
+    <path d="M600 178c-94 0-170 73-170 164 0 37 12 71 33 98-2 18 1 38 10 58 19 43 61 72 108 78l19 56 19-56c47-6 89-35 108-78 9-20 12-40 10-58 21-27 33-61 33-98 0-91-76-164-170-164Z" stroke-width="20"/>
+    <path d="M493 287c29-31 65-47 107-47s78 16 107 47M498 330c32-18 67-27 102-27s70 9 102 27" stroke-width="13"/>
+    <path d="M532 347c22-8 44-11 68-11s46 3 68 11" stroke-width="10"/>
+    <path d="M553 374c17 9 32 13 47 13s30-4 47-13l-8 64-39 36-39-36-8-64Z" fill="#0A0907" stroke-width="13"/>
+    <path d="M517 447c22 30 49 46 83 46s61-16 83-46" stroke-width="12"/>
+    <path d="M469 333l-46-46M731 333l46-46" stroke-width="13"/>
+  </g>
+  <circle cx="550" cy="343" r="8" fill="#E3C46E"/><circle cx="650" cy="343" r="8" fill="#E3C46E"/>
+  <g fill="#D6B45C"><path d="M600 70l18 41 44 4-34 29 10 43-38-23-38 23 10-43-34-29 44-4 18-41Z"/></g>
+</svg>
