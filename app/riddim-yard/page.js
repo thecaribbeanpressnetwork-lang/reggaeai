@@ -1,34 +1,9 @@
-export const metadata = {
-  title: 'The Riddim Yard — Caribbean Riddims, Beats & Instrumentals',
-  description: 'Discover Caribbean riddims, beats, instrumentals and productions, then trace the songs voiced on each production.'
-};
+import { databaseConfigured, query } from '../../lib/db';
 
-const productions = [
-  { title: 'Midnight Cane Riddim', producer: 'ReggaeAI Demo Producer', genre: 'Roots Reggae', bpm: 74, key: 'D minor', songs: ['River Road', 'Under Cane Sky'] },
-  { title: 'Savannah Dust', producer: 'ReggaeAI Demo Producer', genre: 'Country Reggae', bpm: 82, key: 'G major', songs: ['Long Way Home'] },
-  { title: 'Port of Spain Bounce', producer: 'ReggaeAI Demo Producer', genre: 'Caribbean Hip Hop', bpm: 96, key: 'F minor', songs: ['City Lights'] }
-];
+export const metadata = { title:'The Riddim Yard — Caribbean Riddims, Beats & Instrumentals', description:'Discover published Caribbean riddims, beats, instrumentals and productions, then trace the songs voiced on each production.' };
 
-export default function RiddimYard() {
-  return (
-    <main className="content" style={{paddingTop:48}}>
-      <p className="eyebrow">THE RIDDIM YARD</p>
-      <h1 style={{fontFamily:'Georgia,serif',fontSize:'clamp(2.8rem,7vw,6rem)',margin:'10px 0'}}>The production behind the record.</h1>
-      <p style={{maxWidth:760,color:'#bfb6a8',lineHeight:1.7}}>Browse riddims, beats, instrumentals and backing tracks as first-class Caribbean catalogue objects. Each production can connect to every song recorded or voiced on it.</p>
-      <div className="cards" style={{marginTop:36}}>
-        {productions.map((item) => (
-          <article className="card" key={item.title}>
-            <div className="art"><span>{item.bpm} BPM</span></div>
-            <div className="cardCopy" style={{paddingRight:14}}>
-              <strong>{item.title}</strong>
-              <small>{item.genre} · {item.key}</small>
-              <small>Producer: {item.producer}</small>
-              <small>Voiced on this riddim: {item.songs.join(' · ')}</small>
-            </div>
-          </article>
-        ))}
-      </div>
-      <p style={{marginTop:40}}><a className="secondary linkButton" href="/">← Back to Discover</a></p>
-    </main>
-  );
+export default async function RiddimYard(){
+  let productions=[];
+  if(databaseConfigured())try{const result=await query(`select p.slug,p.title,p.production_type,p.bpm,p.musical_key,p.rights_state,a.display_name producer,count(r.id)::int song_count from productions p left join artists a on a.id=p.producer_artist_id left join recordings r on r.production_id=p.id and r.publication_state='PUBLISHED' where p.publication_state='published' group by p.id,a.display_name order by p.created_at desc limit 100`);productions=result.rows;}catch(error){console.error('riddim_yard_read_failed',error?.message||error);}
+  return <main className="detailShell"><section className="detailHero compact"><span className="eyebrow">THE RIDDIM YARD</span><h1>The production behind the record.</h1><p>Riddims, beats, instrumentals and backing tracks are first-class Caribbean catalogue objects. Each production can connect to every verified published song voiced on it.</p></section><section className="detailSection"><div className="resultGrid">{productions.map(item=><a className="resultCard" href={`/riddims/${item.slug}`} key={item.slug}><span className="resultType">{String(item.production_type).replaceAll('_',' ')}</span><strong>{item.title}</strong><small>{[item.producer,item.bpm?`${item.bpm} BPM`:null,item.musical_key,item.song_count?`${item.song_count} songs`:null].filter(Boolean).join(' · ')}</small><span>→</span></a>)}{!productions.length?<a className="resultCard" href="/riddims/midnight-cane-riddim"><span className="resultType">DEMO METADATA ONLY</span><strong>Midnight Cane Riddim</strong><small>No audio, licence or fake producer identity is asserted.</small><span>→</span></a>:null}</div></section></main>;
 }
