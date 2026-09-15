@@ -1,5 +1,5 @@
 -- ReggaeAI core PostgreSQL schema
--- Designed for managed PostgreSQL (Railway Postgres, Supabase, or equivalent).
+-- Designed for Supabase/Postgres or equivalent managed Postgres.
 
 create extension if not exists pgcrypto;
 
@@ -7,7 +7,6 @@ create table if not exists users (
   id uuid primary key default gen_random_uuid(),
   email text unique,
   display_name text,
-  avatar_url text,
   auth_provider text,
   auth_subject text,
   created_at timestamptz not null default now(),
@@ -23,6 +22,7 @@ create table if not exists artists (
   bio text,
   region text,
   verified boolean not null default false,
+  owner_user_id uuid references users(id),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -31,7 +31,7 @@ create table if not exists artist_claims (
   id uuid primary key default gen_random_uuid(),
   artist_id uuid not null references artists(id) on delete cascade,
   user_id uuid not null references users(id) on delete cascade,
-  state text not null default 'pending' check (state in ('pending','approved','rejected','revoked')),
+  status text not null default 'pending' check (status in ('pending','needs_evidence','approved','rejected','withdrawn')),
   evidence jsonb not null default '{}'::jsonb,
   reviewed_at timestamptz,
   created_at timestamptz not null default now(),
@@ -70,11 +70,13 @@ create table if not exists recordings (
 create table if not exists imports (
   id uuid primary key default gen_random_uuid(),
   user_id uuid references users(id),
+  artist_id uuid references artists(id),
   source_provider text not null,
   source_url text not null,
   canonical_url text,
   provider_item_id text,
   resolved_metadata jsonb not null default '{}'::jsonb,
+  rights_declaration jsonb not null default '{}'::jsonb,
   rights_confirmed boolean not null default false,
   hosted boolean not null default false,
   monetizable boolean not null default false,
@@ -83,11 +85,30 @@ create table if not exists imports (
   unique(source_provider, provider_item_id)
 );
 
-create table if not exists library_items (
+create table if not exists release_readiness (
+  id uuid primary key default gen_random_uuid(),
+  recording_id uuid not null unique references recordings(id) on delete cascade,
+  audio_state text not null default 'missing',
+  artwork_state text not null default 'missing',
+  metadata_state text not null default 'missing',
+  rights_state text not null default 'unknown',
+  provenance_state text not null default 'unknown',
+  credits_state text not null default 'missing',
+  catalogue_state text not null default 'unchecked',
+  readiness_state text not null default 'discovered' check (readiness_state in ('discovered','ready','auto_execute','approval_required','signature_required','submitted','third_party_pending','blocked','verified_complete')),
+  score integer not null default 0 check (score between 0 and 100),
+  blockers jsonb not null default '[]'::jsonb,
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists saved_items (
+  id uuid primary key default gen_random_uuid(),
   user_id uuid not null references users(id) on delete cascade,
-  recording_id uuid not null references recordings(id) on delete cascade,
+  recording_id uuid references recordings(id) on delete cascade,
+  production_id uuid references productions(id) on delete cascade,
   created_at timestamptz not null default now(),
-  primary key(user_id, recording_id)
+  check ((recording_id is not null)::int + (production_id is not null)::int = 1),
+  unique(user_id, recording_id, production_id)
 );
 
 create table if not exists products (
@@ -127,10 +148,9 @@ create table if not exists order_items (
 create table if not exists download_entitlements (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references users(id) on delete cascade,
-  order_item_id uuid not null references order_items(id) on delete cascade,
-  status text not null default 'active' check (status in ('active','revoked','refunded')),
-  created_at timestamptz not null default now(),
-  unique(user_id, order_item_id)
+  order_item_id uuid not null unique references order_items(id) on delete cascade,
+  granted_at timestamptz not null default now(),
+  revoked_at timestamptz
 );
 
 create table if not exists rights_holders (
@@ -184,7 +204,11 @@ create table if not exists payouts (
   created_at timestamptz not null default now()
 );
 
--- ReggaeAI V1 payout policy:
+-- Creator control invariants:
+-- * Artist claims never confer ownership until approved.
+-- * Import/source-link association is evidence, not proof of rights.
+-- * Release readiness is computed from explicit component states; score alone cannot override blockers.
+-- * Monetization requires separate rights/provenance gates.
 -- * Creator accounting currency: USD
 -- * Minimum payout: US$25
 -- * Payout cadence: monthly, covering the previous closed accounting period
