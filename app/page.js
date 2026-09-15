@@ -24,13 +24,20 @@ function Rail({ title, items }) {
   );
 }
 
+function Wordmark() {
+  return <span className="wordmark"><span className="wordmarkReggae">REGGAE</span><span className="wordmarkAi">AI</span></span>;
+}
+
 export default function Home() {
   return (
     <main>
       <header className="topbar">
-        <a className="brand" href="#">REGGAE<span>AI</span></a>
+        <a className="brand" href="#discover" aria-label="ReggaeAI home">
+          <img src="/reggaeai-lion.svg" alt="" className="brandIcon" />
+          <Wordmark />
+        </a>
         <nav>
-          <a href="#discover">Discover</a><a href="#search">Search</a><a href="#riddim">Riddim Yard</a><a href="#create">Create</a><a href="#library">Library</a><a href="#upload">Upload</a>
+          <a href="#discover">Discover</a><a href="#search">Search</a><a href="/riddim-yard">Riddim Yard</a><a href="#create">Create</a><a href="#library">Library</a><a href="#upload">Upload</a>
         </nav>
         <button className="account">Sign in</button>
       </header>
@@ -38,12 +45,16 @@ export default function Home() {
       <section className="hero" id="discover">
         <div className="heroTexture" />
         <div className="heroCopy">
-          <p className="eyebrow">CARIBBEAN AI MUSIC · BUILT IN THE CARIBBEAN</p>
+          <div className="heroBrand"><span className="eyebrow">CARIBBEAN AI MUSIC · BUILT IN THE CARIBBEAN</span></div>
           <h1>The islands are<br/><em>creating next.</em></h1>
           <p>Discover new Caribbean AI music, trace the riddims behind the records, create your own sound and publish with clear provenance.</p>
           <div className="heroActions"><a className="primary linkButton" href="#catalogue">Start listening</a><a className="secondary linkButton" href="#upload">+ Create</a></div>
         </div>
-        <div className="lionMark" aria-label="ReggaeAI winged lion brand mark"><div className="wing leftWing"/><div className="lion">RAI</div><div className="wing rightWing"/></div>
+        <div className="brandCrest" aria-label="ReggaeAI original winged lion emblem">
+          <img src="/reggaeai-lion.svg" alt="ReggaeAI winged lion emblem" className="heroLion" />
+          <Wordmark />
+          <span className="brandLine">CARIBBEAN SOUND · FUTURE INTELLIGENCE</span>
+        </div>
       </section>
 
       <section className="importPanel" id="upload">
@@ -55,7 +66,7 @@ export default function Home() {
         {rails.map(([title, items]) => <Rail key={title} title={title} items={items}/>) }
       </div>
 
-      <footer><strong>ReggaeAI</strong><span>Discovery · Creation · Licensing · Caribbean music intelligence</span></footer>
+      <footer><div className="footerBrand"><img src="/reggaeai-lion.svg" alt=""/><Wordmark /></div><span>Discovery · Creation · Licensing · Caribbean music intelligence</span></footer>
 
       <div className="player">
         <div className="miniArt"/><div className="track"><strong>Ready to play</strong><small>Select a track from the catalogue</small></div>
