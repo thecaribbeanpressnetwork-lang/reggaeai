@@ -17,15 +17,15 @@ export default async function Home() {
           <span className="eyebrow">FEATURED RECORD · COUNTRY REGGAE</span>
           <p className="featureKicker">AVEN INDIGO</p>
           <h1>The River<br/>Knows My Name</h1>
-          <p className="featureDeck">A reflective Caribbean country-reggae record from Shot Call Records. ReggaeAI presents the music first, with provenance and rights intelligence underneath instead of turning the experience into an AI dashboard.</p>
+          <p className="featureDeck">A reflective Caribbean country-reggae journey through roots, resilience and freedom. Caribbean stories, real emotions, timeless vibration.</p>
           <div className="heroActions">
             <a className="primary linkButton" href="/music/the-river-knows-my-name">Open record</a>
             <a className="secondary linkButton" href="/artists/aven-indigo">Meet Aven Indigo</a>
           </div>
           <div className="featureMeta" aria-label="Featured release facts">
             <span><b>03:24</b> duration</span>
-            <span><b>AI PERSONA</b> transparent provenance</span>
-            <span><b>TRINIDAD & TOBAGO</b> label origin</span>
+            <span><b>AI ARTIST</b> transparent provenance</span>
+            <span><b>COUNTRY REGGAE</b> Caribbean roots</span>
           </div>
         </div>
         <a className="featureCover" href="/music/the-river-knows-my-name" aria-label="Open The River Knows My Name by Aven Indigo">
@@ -35,7 +35,7 @@ export default async function Home() {
             <div className="coverTitle">THE RIVER<br/>KNOWS<br/>MY NAME</div>
             <span className="coverGenre">COUNTRY REGGAE</span>
           </div>
-          <div className="coverCaption"><span>Shot Call Records</span><span>Featured release →</span></div>
+          <div className="coverCaption"><span>Aven Indigo</span><span>Featured release →</span></div>
         </a>
       </section>
 
