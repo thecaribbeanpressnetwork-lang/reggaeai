@@ -1,12 +1,14 @@
 import ImportForm from './components/ImportForm';
 import MusicRail from './components/MusicRail';
-import { catalogueRails } from './lib/catalogue';
+import { getCatalogueRails } from './lib/catalogue';
 
 function Wordmark() {
   return <span className="wordmark"><span className="wordmarkReggae">REGGAE</span><span className="wordmarkAi">AI</span></span>;
 }
 
-export default function Home() {
+export default async function Home() {
+  const catalogue = await getCatalogueRails();
+
   return (
     <main>
       <header className="topbar">
@@ -47,8 +49,8 @@ export default function Home() {
         <ImportForm />
       </section>
 
-      <div className="content" id="catalogue">
-        {catalogueRails.map((rail) => <MusicRail key={rail.title} {...rail} />)}
+      <div className="content" id="catalogue" data-catalogue-source={catalogue.source}>
+        {catalogue.rails.map((rail) => <MusicRail key={rail.title} {...rail} />)}
       </div>
 
       <footer>
