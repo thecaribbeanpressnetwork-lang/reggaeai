@@ -30,12 +30,19 @@ export default function ImportForm() {
     <div>
       <form onSubmit={submit}>
         <input value={url} onChange={(event) => setUrl(event.target.value)} aria-label="Song link" placeholder="https://suno.com/s/..." />
-        <button type="submit" className="primary" disabled={loading}>{loading ? 'Checking…' : 'Import song'}</button>
+        <button type="submit" className="primary" disabled={loading}>{loading ? 'Resolving…' : 'Import song'}</button>
       </form>
       {result && (
         <div className={`importResult ${result.ok ? 'ok' : 'error'}`}>
           {result.ok ? (
-            <><strong>{result.provider.toUpperCase()} link recognized</strong><span>State: {result.state}. Rights are not assumed from a public link.</span></>
+            <>
+              <strong>{result.metadata?.title || `${result.provider.toUpperCase()} song discovered`}</strong>
+              {result.metadata?.artworkUrl ? <img src={result.metadata.artworkUrl} alt="Imported song artwork" style={{width:72,height:72,objectFit:'cover',borderRadius:12}} /> : null}
+              <span>Provider: {result.provider.toUpperCase()} · State: {result.state}</span>
+              {result.providerId ? <span>Source ID: {result.providerId}</span> : null}
+              {result.resolutionError ? <span>Metadata note: {result.resolutionError}</span> : null}
+              <span>Rights are not assumed from a public link. Creator confirmation is required before hosting or monetization.</span>
+            </>
           ) : (
             <><strong>Import blocked</strong><span>{result.error}</span></>
           )}
