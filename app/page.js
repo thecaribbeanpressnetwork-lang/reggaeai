@@ -10,47 +10,76 @@ export default async function Home() {
   const catalogue = await getCatalogueRails();
 
   return (
-    <main>
-      <section className="hero reggaeTextureEdge" id="discover">
-        <div className="heroCopy">
-          <span className="eyebrow">CARIBBEAN SOUND · FUTURE INTELLIGENCE</span>
-          <h1>Music first.<br/><em>Caribbean always.</em></h1>
-          <p>Discover Caribbean records, trace the riddims and productions behind them, create new work and keep the rights and provenance attached to the music.</p>
+    <main className="homeStage">
+      <section className="featureHero" id="discover">
+        <div className="featureTexture" aria-hidden="true" />
+        <div className="featureCopy">
+          <span className="eyebrow">FEATURED RECORD · COUNTRY REGGAE</span>
+          <p className="featureKicker">AVEN INDIGO</p>
+          <h1>The River<br/>Knows My Name</h1>
+          <p className="featureDeck">A reflective Caribbean country-reggae record from Shot Call Records. ReggaeAI presents the music first, with provenance and rights intelligence underneath instead of turning the experience into an AI dashboard.</p>
           <div className="heroActions">
-            <a className="primary linkButton" href="#catalogue">Discover music</a>
-            <a className="secondary linkButton" href="/create">Enter the studio</a>
+            <a className="primary linkButton" href="/music/the-river-knows-my-name">Open record</a>
+            <a className="secondary linkButton" href="/artists/aven-indigo">Meet Aven Indigo</a>
+          </div>
+          <div className="featureMeta" aria-label="Featured release facts">
+            <span><b>03:24</b> duration</span>
+            <span><b>AI PERSONA</b> transparent provenance</span>
+            <span><b>TRINIDAD & TOBAGO</b> label origin</span>
           </div>
         </div>
-        <div className="brandCrest" aria-label="ReggaeAI original winged lion emblem">
-          <img src="/reggaeai-lion.svg" alt="ReggaeAI winged lion emblem" className="heroLion" />
-          <Wordmark />
-          <span className="brandLine">THE CARIBBEAN MUSIC PLATFORM BUILT FOR WHAT COMES NEXT</span>
-        </div>
+        <a className="featureCover" href="/music/the-river-knows-my-name" aria-label="Open The River Knows My Name by Aven Indigo">
+          <div className="coverFrame">
+            <div className="coverTexture" />
+            <span className="coverArtist">AVEN INDIGO</span>
+            <div className="coverTitle">THE RIVER<br/>KNOWS<br/>MY NAME</div>
+            <span className="coverGenre">COUNTRY REGGAE</span>
+          </div>
+          <div className="coverCaption"><span>Shot Call Records</span><span>Featured release →</span></div>
+        </a>
       </section>
 
-      <section className="platformBand" aria-label="ReggaeAI platform pillars">
-        <a href="/search"><span>01</span><strong>Discover</strong><small>Artists, releases, genres and Caribbean sound</small></a>
-        <a href="/riddim-yard"><span>02</span><strong>Riddim Yard</strong><small>Productions, versions and instrumental lineage</small></a>
-        <a href="/create"><span>03</span><strong>Create</strong><small>Generate real music with Caribbean direction</small></a>
-        <a href="/upload"><span>04</span><strong>Import</strong><small>Bring in music with provenance intact</small></a>
+      <section className="cultureBar" aria-label="Caribbean music platform">
+        <div><strong>REGGAEAI</strong><span>Caribbean music lives here.</span></div>
+        <nav>
+          <a href="/genres/roots-reggae">Roots</a>
+          <a href="/genres/country-reggae">Country Reggae</a>
+          <a href="/genres/soca">Soca</a>
+          <a href="/genres/calypso">Calypso</a>
+          <a href="/genres/dancehall">Dancehall</a>
+          <a href="/riddim-yard">Riddims</a>
+        </nav>
       </section>
 
-      <div className="content" id="catalogue" data-catalogue-source={catalogue.source}>
+      <div className="content musicFloor" id="catalogue" data-catalogue-source={catalogue.source}>
+        <header className="floorIntro">
+          <span className="eyebrow">DISCOVER</span>
+          <h2>Records, riddims and Caribbean sound.</h2>
+          <p>Browse the catalogue like a record wall, not a software dashboard.</p>
+        </header>
         {catalogue.rails.map((rail) => <MusicRail key={rail.title} {...rail} />)}
       </div>
 
-      <section className="importPanel reggaeTextureBand" id="upload">
-        <div>
-          <span className="eyebrow">ONE-LINK IMPORT</span>
-          <h2>Bring your music in without losing its story.</h2>
-          <p>Paste a supported Suno, Treblo or other AI-music link. ReggaeAI resolves public metadata and provenance, then keeps ownership and monetization behind explicit rights gates.</p>
+      <section className="studioSplit">
+        <div className="studioStory">
+          <span className="eyebrow">CREATE</span>
+          <h2>Enter the studio.<br/><em>Leave with music.</em></h2>
+          <p>Caribbean direction, genre intelligence and real generation tools without sci-fi theatre.</p>
+          <a className="primary linkButton" href="/create">Open the studio</a>
         </div>
-        <ImportForm />
+        <div className="importPanel reggaeTextureBand" id="upload">
+          <div>
+            <span className="eyebrow">BRING YOUR MUSIC</span>
+            <h2>Keep the story attached to the song.</h2>
+            <p>Paste a supported Suno, Treblo or other source link. ReggaeAI resolves public metadata, then keeps ownership and monetization behind explicit rights gates.</p>
+          </div>
+          <ImportForm />
+        </div>
       </section>
 
       <footer>
         <div className="footerBrand"><img src="/reggaeai-lion.svg" alt=""/><Wordmark /></div>
-        <span>Music · Riddims · Creation · Rights · Caribbean provenance</span>
+        <span>Music first · Caribbean always · Technology underneath</span>
       </footer>
     </main>
   );
