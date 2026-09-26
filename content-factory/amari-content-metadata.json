@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "1.0",
+  "artist": {
+    "name": "Amari Inniss",
+    "country": "Trinidad & Tobago",
+    "website": "https://ftnplatform.org/amari-inniss/",
+    "socials": {
+      "facebook": "https://www.facebook.com/profile.php?id=61594664976872",
+      "instagram": "https://www.instagram.com/amariinniss/",
+      "tiktok": "https://www.tiktok.com/@amariinniss2027",
+      "youtube": "https://www.youtube.com/@Amari-Inniss",
+      "youtubeChannelId": "UCChy7ZcLtsPhjUfJ7wPgPMA"
+    }
+  },
+  "campaign": {
+    "album": "Doh Study Me. Study De Music.",
+    "releaseDate": "2026-10-09",
+    "presave": "https://distrokid.com/hyperfollow/amariinniss/doh-study-me-study-de-music"
+  },
+  "distributionDefaults": {
+    "includeSocialFooter": true,
+    "socialOrder": ["facebook", "instagram", "tiktok", "youtube"],
+    "shortSurfaceFallback": "https://ftnplatform.org/amari-inniss/",
+    "preReleasePrimaryCta": "presave",
+    "postReleasePrimaryCta": "stream"
+  },
+  "requiredPropagationTargets": [
+    "website",
+    "video_descriptions",
+    "channel_bios",
+    "end_cards",
+    "link_hubs",
+    "automation_scripts",
+    "launch_materials",
+    "cta_templates",
+    "content_factory_metadata"
+  ]
+}
