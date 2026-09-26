@@ -1,0 +1,28 @@
+{
+  "artist": "Amari Inniss",
+  "website": "https://ftnplatform.org/amari-inniss/",
+  "presave": "https://distrokid.com/hyperfollow/amariinniss/doh-study-me-study-de-music",
+  "socials": {
+    "facebook": {
+      "label": "Facebook",
+      "url": "https://www.facebook.com/profile.php?id=61594664976872"
+    },
+    "instagram": {
+      "label": "Instagram",
+      "handle": "@amariinniss",
+      "url": "https://www.instagram.com/amariinniss/"
+    },
+    "tiktok": {
+      "label": "TikTok",
+      "handle": "@amariinniss2027",
+      "url": "https://www.tiktok.com/@amariinniss2027"
+    },
+    "youtube": {
+      "label": "YouTube",
+      "handle": "@Amari-Inniss",
+      "channelId": "UCChy7ZcLtsPhjUfJ7wPgPMA",
+      "url": "https://www.youtube.com/@Amari-Inniss"
+    }
+  },
+  "policy": "Use these canonical links in every Amari-owned website surface, channel bio, video description template, end card, link hub, launch asset, CTA template, automation workflow and content-factory metadata record unless a later approved canonical-link update replaces them."
+}
